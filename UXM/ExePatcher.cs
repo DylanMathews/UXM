@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace UXM
 {
+    using System.Collections.Generic;
+    using System.Threading;
+
     class ExePatcher
     {
         private static readonly Encoding UTF16 = Encoding.Unicode;
@@ -38,6 +39,13 @@ namespace UXM
                     progress.Report((1, "Patching cancelled."));
                     return null;
                 }
+            }
+
+            if (game == Util.Game.EldenRing)
+            {
+                DialogResult choice = MessageBox.Show("We do not support patching Elden Ring at this time.", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return null;
             }
 
             if (!File.Exists(gameDir + "\\_backup\\" + exeName))

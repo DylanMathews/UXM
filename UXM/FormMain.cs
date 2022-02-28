@@ -1,16 +1,17 @@
-﻿using Microsoft.WindowsAPICodePack.Taskbar;
-using Semver;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Media;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
+﻿
 namespace UXM
 {
+    using System.Threading;
+    using System.Windows.Forms;
+    using System;
+    using System.Net.Http;
+    using Semver;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Media;
+    using System.Threading.Tasks;
+    using Microsoft.WindowsAPICodePack.Taskbar;
+
     public partial class FormMain : Form
     {
         private const string UPDATE_LINK = "https://www.nexusmods.com/sekiro/mods/26?tab=files";

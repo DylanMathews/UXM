@@ -1,10 +1,10 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
+﻿
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+using System.Reflection;
+using System.Runtime.InteropServices;
+
 [assembly: AssemblyTitle("UXM")]
 [assembly: AssemblyDescription("Enables file modding for Dark Souls 2, Scholar of the First Sin, Dark Souls 3, and Sekiro.")]
 #if DEBUG

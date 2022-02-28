@@ -43,9 +43,11 @@ namespace UXM
                 prefix = "Sekiro";
             else if (game == Util.Game.SekiroBonus)
                 prefix = "SekiroBonus";
+            else if (game == Util.Game.EldenRing)
+                prefix = "EldenRing";
             else
                 throw new ArgumentException("Invalid game type.");
-            
+
 #if DEBUG
             string gameInfo = File.ReadAllText($@"..\..\dist\res\{prefix}GameInfo.xml");
             string dictionary = File.ReadAllText($@"..\..\dist\res\{prefix}Dictionary.txt");

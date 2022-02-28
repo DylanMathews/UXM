@@ -14,7 +14,7 @@ namespace UXM
     {
         private const int WRITE_LIMIT = 1024 * 1024 * 100;
 
-        public static string Unpack(string exePath, IProgress<(double value, string status)> progress, CancellationToken ct)
+        public static string Unpack(string exePath, System.IProgress<(double value, string status)> progress, CancellationToken ct)
         {
             progress.Report((0, "Preparing to unpack..."));
             string gameDir = Path.GetDirectoryName(exePath);
@@ -59,6 +59,10 @@ namespace UXM
             else if (game == Util.Game.SekiroBonus)
             {
                 keys = ArchiveKeys.SekiroBonusKeys;
+            }
+            else if (game == Util.Game.EldenRing)
+            {
+                keys = ArchiveKeys.EldenRingKeys;
             }
 
             string drive = Path.GetPathRoot(Path.GetFullPath(gameDir));
@@ -130,8 +134,20 @@ namespace UXM
             IProgress<(double value, string status)> progress, CancellationToken ct)
         {
             progress.Report(((index + 2.0) / (total + 2.0), $"Loading {archive}..."));
-            string bhdPath = $@"{gameDir}\{archive}.bhd";
-            string bdtPath = $@"{gameDir}\{archive}.bdt";
+
+            String extraDir;
+
+            // Terrible hack.
+            if (archive == "sd")
+            {
+                extraDir = "\\sd\\";
+            } else
+            {
+                extraDir = "";
+            }
+
+            string bhdPath = $@"{gameDir}\{extraDir}{archive}.bhd";
+            string bdtPath = $@"{gameDir}\{extraDir}{archive}.bdt";
 
             if (File.Exists(bhdPath) && File.Exists(bdtPath))
             {
@@ -150,6 +166,7 @@ namespace UXM
                     {
                         using (MemoryStream bhdStream = CryptographyUtility.DecryptRsa(bhdPath, key))
                         {
+                            bhdStream.Seek(0, SeekOrigin.Begin);
                             bhd = BHD5.Read(bhdStream, gameVersion);
                         }
                     }
@@ -200,7 +217,7 @@ namespace UXM
                                 else
                                 {
                                     unknown = true;
-                                    string filename = $"{archive}_{header.FileNameHash:D10}";
+                                    string filename = $"{archive}_{header.FileNameHash:D20}";
                                     string directory = $@"{gameDir}\_unknown";
                                     path = $@"{directory}\{filename}";
                                     if (File.Exists(path) || Directory.Exists(directory) && Directory.GetFiles(directory, $"{filename}.*").Length > 0)
@@ -254,6 +271,21 @@ namespace UXM
                                             path += ".entryfilelist";
                                         else if (bytes.Length >= 4 && br.GetASCII(0, 4) == "DCX\0")
                                             path += ".dcx";
+                                        else if (bytes.Length >= 4 && br.GetASCII(0, 4) == "RIFF")
+                                            path += ".wem";
+                                        else if (bytes.Length >= 4 && br.GetASCII(0, 4) == "BKHD")
+                                            path += ".bnk";
+                                        else if (bytes.Length >= 4 && br.GetASCII(0, 4) == "AKPK")
+                                            path += ".pck";
+                                        else if (bytes.Length >= 4 && br.GetASCII(0, 4) == "SBI\0")
+                                            path += ".sbi";
+                                        else
+                                            path += ".unk";
+
+                                        String ext = path.Split('.')[1];
+                                       
+                                        File.AppendAllText("C:\\Users\\Dylan\\Documents\\modding\\souls\\hashes.txt", $"{header.FileNameHash:D20},{ext},{archive}" + "\n");
+
                                         br.Stream.Close();
                                     }
                                 }
@@ -267,6 +299,8 @@ namespace UXM
                                     Directory.CreateDirectory(Path.GetDirectoryName(path));
                                     writingSize += bytes.Length;
                                     asyncFileWriters.Add(WriteFileAsync(path, bytes));
+
+
                                 }
                                 catch (Exception ex)
                                 {

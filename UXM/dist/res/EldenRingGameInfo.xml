@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<game_info>
+  <required_gb>46</required_gb>
+  <bhd5_game>EldenRing</bhd5_game>
+  <archives>
+    <archive>Data0</archive>
+    <archive>Data1</archive>
+    <archive>Data2</archive>
+    <archive>Data3</archive>
+    <archive>sd</archive>
+  </archives>
+  <backup_dirs>
+  </backup_dirs>
+  <delete_dirs>
+  </delete_dirs>
+  <replacements>
+    <replacement>data:/</replacement>
+  </replacements>
+</game_info>

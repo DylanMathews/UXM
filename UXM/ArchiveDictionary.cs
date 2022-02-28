@@ -8,11 +8,11 @@ namespace UXM
     {
         private const uint PRIME = 37;
 
-        private Dictionary<uint, string> hashes;
+        private Dictionary<ulong, string> hashes;
 
         public ArchiveDictionary(string dictionary)
         {
-            hashes = new Dictionary<uint, string>();
+            hashes = new Dictionary<ulong, string>();
             foreach (string line in Regex.Split(dictionary, "[\r\n]+"))
             {
                 string trimmed = line.Trim();
@@ -32,7 +32,7 @@ namespace UXM
             return hashable.Aggregate(0u, (i, c) => i * PRIME + c);
         }
 
-        public bool GetPath(uint hash, out string path)
+        public bool GetPath(ulong hash, out string path)
         {
             return hashes.TryGetValue(hash, out path);
         }
